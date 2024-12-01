@@ -9,7 +9,7 @@
 // test_md5_cpu_avx() --- test the correctness of md5_cpu() and measure its execution time
 //
 
-#if defined(__GNUC__) && defined(__AVX2__)
+//#if defined(__GNUC__) && defined(__AVX2__)
 #ifndef MD5_CPU_AVX2
 #define MD5_CPU_AVX2
 
@@ -23,6 +23,7 @@ static void md5_cpu_avx2(v8si *interleaved8_data,v8si *interleaved8_hash)
 { // eight interleaved messages -> four interleaved MD5 hashes
   v8si a,b,c,d,interleaved8_state[4],interleaved8_x[16];
 # define C(c)         (v8si){ (int)(c),(int)(c),(int)(c),(int)(c),(int)(c),(int)(c),(int)(c),(int)(c)}
+// for avx2
 // # define ROTATE(x,n)  (__builtin_ia32_pslldi128(x,n) | __builtin_ia32_psrldi128(x,32 - (n)))
 # define ROTATE(x,n)  (__builtin_ia32_pslldi256(x,n) | __builtin_ia32_psrldi256(x,32 - (n)))
 # define DATA(idx)    interleaved8_data[idx]
@@ -40,7 +41,7 @@ static void md5_cpu_avx2(v8si *interleaved8_data,v8si *interleaved8_hash)
 
 
 //
-// correctness test of md5_cpu_avx() --- test_md5_cpu() must be called first!
+// correctness test of md5_cpu_avx2() --- test_md5_cpu() must be called first!
 //
 
 static void test_md5_cpu_avx2(void)
