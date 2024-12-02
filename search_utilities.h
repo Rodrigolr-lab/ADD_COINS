@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef unsigned int u32_t;
+
+u32_t test_next_value_to_try_ascii(); // this will help warming up (turbo boost) the processor!
 
 u32_t next_value_to_try_ASCII(u32_t v){
+
   v = v + 1; // adicionar 1 ao LSB
   if ((v & 0x000000FF) != 0x0000007F) return v; // nao deu overflow
   v += 0x000000A1; // adicionar 1 ao proximo byte

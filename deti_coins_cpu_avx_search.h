@@ -30,36 +30,35 @@ static void deti_coins_cpu_special_search(void)
   u32_t hash[4u];
   u64_t n_attempts,n_coins;
   // u08_t *bytes;
-  u32_t lane, idx;
 
   //
   // iniciar a estrutura
   //
   static u32_t test_data[13u * 4u] __attribute__((aligned(16)));
-  // static u32_t test_hash[ 4u * 4u] __attribute__((aligned(16)));
+  static u32_t test_hash[ 4u * 4u] __attribute__((aligned(16)));
 
   //
   // iniciar valores da coin
   //
-  coin_t coin;
+  coin_t coin[4];
   int n;
 
-  if((n = snprintf(coin.coin_as_chars,53,"DETI coin %d ............RODRIGO...................\n",12)) != 52)
-  {
-    fprintf(stderr,"not exactly 52 bytes... (n=%d)\n",n);
-    exit(1);
+  for (int lane = 0; lane < 4; lane++){
+    if((n = snprintf(coin.coin_as_chars,53,"DETI coin %d ............RODRIGO...................\n",12)) != 52)
+    {
+      fprintf(stderr,"not exactly 52 bytes... (n=%d)\n",n);
+      exit(1);
+    }
+    // print coin content
+    for(n = 0;n < 13 * 4;n++){
+      // guardar a coin na test_data?
+      test_data[n] = coin[lane].coin_as_ints[n];
+      printf("%2d %3d [%c]\n",n,coin[lane].coin_as_chars[n],coin[lane].coin_as_chars[n]);
+    }
   }
-  // print coin content
-  for(n = 0;n < 13 * 4;n++){
-    // guardar a coin na test_data?
-    test_data[n] = coin.coin_as_ints[n];
-    printf("%2d %3d [%c]\n",n,coin.coin_as_chars[n],coin.coin_as_chars[n]);
-  }
-
   //
   // find DETI coins
   //
-  // nao sei se devia ser incrementado de 4 em 4
   for(n_attempts = n_coins = 0ul;stop_request == 0;n_attempts++)
   {
     // para computar MD5 HASH com AVX
@@ -68,13 +67,11 @@ static void deti_coins_cpu_special_search(void)
     //
     // compute MD5 hash
     //
-    // for (int lane = 0; lane < 4; lane++){
+    for (int lane = 0; lane < 4; lane++){
       // u32_t *
-      md5_cpu(coin.coin_as_ints, hash);
-    // }
-    for(lane = 0u;lane < 4u;lane++)                                      // for each message number
-      for(idx = 0u;idx < 13u;idx++)                                      //  for each message word
-        test_data[4u * idx + lane] = coin[];  //   interleave
+      //md5_cpu(coin.coin_as_ints, hash);
+      md5_cpu_avx(coin[lane].coin_as_ints);
+    }
 
     //
     // byte-reverse each word (that's how the MD5 message digest is printed...)
@@ -106,7 +103,7 @@ static void deti_coins_cpu_special_search(void)
     if (v1 == 0x20202020) {
     v2 = next_value_to_try_ASCII(v2);
     }
-    test_data[13*5]=v1;
+    test_data[5*13]=v1;
     test_data[6*13]=v2;
   }
   STORE_DETI_COINS();

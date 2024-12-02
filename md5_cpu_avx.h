@@ -9,7 +9,7 @@
 // test_md5_cpu_avx() --- test the correctness of md5_cpu() and measure its execution time
 //
 
-// #if defined(__GNUC__) && defined(__AVX__)
+#if defined(__GNUC__) && defined(__AVX__)
 #ifndef MD5_CPU_AVX
 #define MD5_CPU_AVX
 
