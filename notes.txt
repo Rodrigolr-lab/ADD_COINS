@@ -1,0 +1,3 @@
+quantas tentativas por segundo
+cc - Wall -02 deti_coins_web_assembly.c 
+// fazer mais  tentativas no loop

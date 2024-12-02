@@ -61,7 +61,7 @@ static void test_md5_cpu_avx(void)
     //
     // interleave data
     //
-    for(lane = 0u;lane < 4u;lane++)                                      // for each message number
+      for(lane = 0u;lane < 4u;lane++)                                      // for each message number
       for(idx = 0u;idx < 13u;idx++)                                      //  for each message word
         interleaved_test_data[4u * idx + lane] = htd[13u * lane + idx];  //   interleave
     //
